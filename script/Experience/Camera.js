@@ -9,15 +9,13 @@ export default class Camera {
         this.scene = this.experience.scene
         this.canvas = this.experience.canvas
 
-        console.log(this.canvas)
-
         this.setInstance()
         this.setControls()
     }
 
     setInstance() {
         this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, .1 , 100)
-        this.instance.position.set(15,5,15)
+        this.instance.position.set(20,10,10)
         this.scene.add(this.instance)
     }
 

@@ -12,8 +12,8 @@ export default class Environment
 
         // Setup
         this.setSunLight()
-        this.setBackLight()
-        this.setHelpers()
+        // this.setBackLight()
+        // this.setHelpers()
         this.setEnvironmentMap()
     }
 
@@ -21,7 +21,7 @@ export default class Environment
     {
         this.sunLight = new THREE.DirectionalLight('#ffffff', 1)
         this.sunLight.castShadow = true
-        this.sunLight.position.set(5, 0, -3)
+        this.sunLight.position.set(0, 10, 0)
         this.sunLight.lookAt(this.experience.world)
         this.scene.add(this.sunLight)
     }
@@ -39,7 +39,7 @@ export default class Environment
         this.helpers.forEach(light => {
             const helper = new DirectionalLightHelper(light, 3, '#ff0000')
 
-            // ßthis.scene.add(helper)
+            // this.scene.add(helper)
         })
     }
 

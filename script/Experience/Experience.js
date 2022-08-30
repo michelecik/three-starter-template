@@ -8,6 +8,7 @@ import Time from "./Utils/Time"
 import Resources from './Utils/Resources'
 import sources from './sources.js'
 import PhyTime from './Utils/PhyTime'
+import PhyWorld from './World/Physics/PhyWorld'
 
 let instance = null
 
@@ -31,9 +32,11 @@ export default class Experience {
         this.phyTime = new PhyTime()
         this.scene = new THREE.Scene()
         
-        this.phyWorld = new CANNON.World()
+        // this.phyWorld = new CANNON.World()
 
-        this.phyWorld.gravity.set(0, -9.8, 0)
+        // this.phyWorld.gravity.set(0, -9.8, 0)
+
+        this.phyWorld = new PhyWorld()
 
         this.camera = new Camera()
         this.renderer = new Renderer()        
@@ -59,7 +62,7 @@ export default class Experience {
     update() {
         if (this.collisionManager) this.collisionManager.update()
         
-        this.phyWorld.fixedStep()
+        this.phyWorld.update()
         this.camera.update()
         this.renderer.update()
     }

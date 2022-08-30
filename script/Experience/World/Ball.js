@@ -1,52 +1,40 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import Experience from "../Experience";
-import colors from '../colors';
+import Experience from '../Experience'
+import colors from '../colors'
 
-export default class Floor {
-    constructor(pos) {
-
-        if(pos) {
-            this.pos = pos
-        } else {
-            this.pos = { x: 0, y: 0, z: 0 }
-        }
+export default class Ball {
+    constructor() {
+        
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.phyWorld = this.experience.phyWorld
         this.phyTime = this.experience.phyTime
 
+        this.positionY = 4
+        this.radius = .25
+        this.segments = 20
 
         this.phyTime.on('tick', () => {
             this.update()
         })
 
-        // this.resources = this.experiece.resources
-
-        this.width = 5,
-        this.height = .5
-        this.depth = 10
-
         this.setGeometry()
-        this.setTextures()
         this.setMaterial()
         this.setMesh()
 
         this.setShape()
+        this.setPhyMaterial()
         this.setBody()
     }
 
     setGeometry() {
-        this.geometry = new THREE.BoxGeometry(this.width, this.height ,this.depth)
-    }
-
-    setTextures() {
-        // set textures we dont care rn
+        this.geometry = new THREE.SphereGeometry(this.radius, this.segments, this.segments)
     }
 
     setMaterial() {
         this.material = new THREE.MeshStandardMaterial({
-            color: colors.floor
+            color: colors.character
         })
     }
 
@@ -54,24 +42,26 @@ export default class Floor {
         this.mesh = new THREE.Mesh(this.geometry, this.material)
         
         this.mesh.receiveShadow = true
+        this.mesh.castShadow = true
         this.scene.add(this.mesh)
     }
 
     setShape() {
-        this.shape = new CANNON.Box(
-            new CANNON.Vec3(this.width/2, this.height/2, this.depth/2)
-        )
+        this.shape = new CANNON.Sphere(this.radius)
+    }
+
+    setPhyMaterial() {
+        
     }
 
     setBody() {
-        this.body = new CANNON.Body(
-            {
-                mass: 0,
-                shape: this.shape,
-                material: this.phyWorld.concreteMaterial
-            }
-        )
-        this.body.position.set(this.pos.x, this.pos.y, this.pos.z)
+        this.body = new CANNON.Body({
+            mass: 1,
+            shape: this.shape,
+            material: this.phyWorld.plasticMaterial
+        })
+
+        this.body.position = new CANNON.Vec3(0,4,4)
         this.phyWorld.instance.addBody(this.body)
     }
 
