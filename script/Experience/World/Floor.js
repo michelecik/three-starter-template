@@ -23,7 +23,7 @@ export default class Floor {
 
         // this.resources = this.experiece.resources
 
-        this.width = 5,
+        this.width = 10
         this.height = .5
         this.depth = 10
 
