@@ -18,5 +18,54 @@ export default [
         path: [
             'src/fonts/helvetiker_regular.typeface.json'
         ]
+    },
+    {
+        name: 'texture',
+        type: 'texture',
+        path: [
+            'src/static/textures/courtTexture/base.jpg',
+        ]
+    },
+    {
+        name: 'normalCourtTexture',
+        type: 'texture',
+        path: [
+            'src/static/textures/courtTexture/normal.jpg',
+        ]
+    },
+    {
+        name: 'heightCourtTexture',
+        type: 'texture',
+        path: [
+            'src/static/textures/courtTexture/height.png',
+        ]
+    },
+    {
+        name: 'roughnessCourtTexture',
+        type: 'texture',
+        path: [
+            'src/static/textures/courtTexture/roughness.jpg',
+        ]
+    },
+    {
+        name: 'baseCourtTexture',
+        type: 'texture',
+        path: [
+            'src/static/textures/courtTexture/base.jpg',
+        ]
+    },
+    {
+        name: 'ambientOcclusionCourtTexture',
+        type: 'texture',
+        path: [
+            'src/static/textures/courtTexture/occlusion.jpg',
+        ]
+    },
+    {
+        name: 'basketball',
+        type: 'texture',
+        path: [
+            'src/static/textures/basketball/texture.png',
+        ]
     }
 ]

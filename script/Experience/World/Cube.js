@@ -11,6 +11,8 @@ export default class Cube {
         this.phyWorld = this.experience.phyWorld
         this.phyTime = this.experience.phyTime
 
+        this.resources = this.experience.resources
+
         this.phyTime.on('tick', () => {
             this.update()
         })
@@ -21,6 +23,7 @@ export default class Cube {
 
         this.setGeometry()
         this.setMaterial()
+        this.setTexture()
         this.setMesh()
 
         this.setShape()
@@ -36,6 +39,10 @@ export default class Cube {
         this.material = new THREE.MeshStandardMaterial({
             color: colors.character
         })
+    }
+
+    setTexture() {
+        this.material.map = this.resources.items.basketball
     }
 
     setMesh() {

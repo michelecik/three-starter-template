@@ -8,12 +8,17 @@ export default class Ball {
         
         this.experience = new Experience()
         this.scene = this.experience.scene
+        this.resources = this.experience.resources
         this.phyWorld = this.experience.phyWorld
         this.phyTime = this.experience.phyTime
 
-        this.positionY = 4
+        this.positionY = 6
         this.radius = .25
         this.segments = 20
+
+        this.resources.on('ready', () => {
+           this.setTexture()
+        })
 
         this.phyTime.on('tick', () => {
             this.update()
@@ -30,6 +35,10 @@ export default class Ball {
 
     setGeometry() {
         this.geometry = new THREE.SphereGeometry(this.radius, this.segments, this.segments)
+    }
+
+    setTexture() {
+        this.material.map = this.resources.items.basketball
     }
 
     setMaterial() {
@@ -61,7 +70,6 @@ export default class Ball {
             material: this.phyWorld.plasticMaterial
         })
 
-        this.body.position = new CANNON.Vec3(0,4,4)
         this.phyWorld.instance.addBody(this.body)
     }
 

@@ -6,16 +6,22 @@ import colors from '../colors';
 export default class Floor {
     constructor(pos) {
 
-        if(pos) {
+        if (pos) {
             this.pos = pos
         } else {
             this.pos = { x: 0, y: 0, z: 0 }
         }
+
         this.experience = new Experience()
         this.scene = this.experience.scene
+        this.resources = this.experience.resources
         this.phyWorld = this.experience.phyWorld
         this.phyTime = this.experience.phyTime
 
+
+        this.resources.on('ready', () => {
+            this.setTextures()
+        })
 
         this.phyTime.on('tick', () => {
             this.update()
@@ -28,7 +34,6 @@ export default class Floor {
         this.depth = 10
 
         this.setGeometry()
-        this.setTextures()
         this.setMaterial()
         this.setMesh()
 
@@ -37,29 +42,36 @@ export default class Floor {
     }
 
     setGeometry() {
-        this.geometry = new THREE.BoxGeometry(this.width, this.height ,this.depth)
+        this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth)
     }
 
-    setTextures() {
-        // set textures we dont care rn
+    setTextures() {       
+        console.log(this.resources.items)
+        this.material.map = this.resources.items.texture
+        this.material.normalMap = this.resources.items.normalCourtTexture
+        // this.material.normalScale.set(.5,.5)
+        this.material.displacementMap = this.resources.items.heightCourtTexture
+        this.material.displacementScale = 0
     }
 
     setMaterial() {
         this.material = new THREE.MeshStandardMaterial({
-            color: colors.floor
+            color: 0xffffff,
+            metalness: 1,
+            roughness: 4
         })
     }
 
     setMesh() {
         this.mesh = new THREE.Mesh(this.geometry, this.material)
-        
+
         this.mesh.receiveShadow = true
         this.scene.add(this.mesh)
     }
 
     setShape() {
         this.shape = new CANNON.Box(
-            new CANNON.Vec3(this.width/2, this.height/2, this.depth/2)
+            new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2)
         )
     }
 

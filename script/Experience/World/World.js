@@ -5,8 +5,7 @@ import Floor from './Floor';
 import Ball from './Ball';
 import Physics from './Physics/PhyWorld'
 import Pin from './Pin';
-import Wall from './Walls/Wall';
-import Walls from './Walls/Walls';
+import Wall from './Wall';
 import Player from './Player';
 import Cube from './Cube';
 import Basket from './Basket';
@@ -22,12 +21,9 @@ export default class World {
         
         const axesHelper = new THREE.AxesHelper( 10 );
         // this.scene.add( axesHelper );
-        
-        this.resources.on('ready', () => {    
-            this.environment = new Environment()  
-        })
 
         window.addEventListener('keypress', (e) => {
+            console.log(e.code)
             switch(e.code) {
                 case 'Enter':
                     this.createBall()
@@ -35,11 +31,16 @@ export default class World {
             }
         })
 
+        this.resources.on('ready', () => {    
+            this.environment = new Environment()  
+        })
+
         this.player = new Player()
 
         this.balls = []
 
         this.createFloor()
+        // this.createWalls()
         this.createBall()
         this.createBasket()
         this.setPlayer()
@@ -50,6 +51,13 @@ export default class World {
         let floor = new Floor()
     }
 
+    createWalls() {
+        let wall_1 = new Wall({x:0, y:3, z:-5})
+        let wall_2 = new Wall({x:0, y:3, z:5})
+        let wall_3 = new Wall({x:5, y:3, z:0}, true)
+        let wall_4 = new Wall({x:-5, y:3, z:0}, true)
+    }
+
     createBall() {
         let ball = new Ball()
         this.balls.push(ball)
@@ -58,9 +66,6 @@ export default class World {
     setPlayer() {
         let selectedBall = this.balls[this.balls.length - 1]
 
-
-
-        
         this.balls.forEach(ball => {
             ball.mesh.material.color = new THREE.Color(colors.character)
         });

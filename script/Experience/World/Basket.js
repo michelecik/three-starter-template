@@ -12,6 +12,10 @@ export default class Basket {
         this.phyTime = this.experience.phyTime
 
 
+        this.phyTime.on('tick', () => {
+            this.update()
+        })
+
         this.glass = {
             height: 1.5,
             width: 2,
@@ -27,6 +31,7 @@ export default class Basket {
         this.createBase()
         this.createBackboard()
         this.createBasket()
+        this.createBody()
     }
 
     createBase() {
@@ -36,14 +41,12 @@ export default class Basket {
     createBackboard() {
         this.backboardGeometry = new THREE.BoxGeometry(this.glass.width, this.glass.height, this.glass.depth)
         this.backboardMateral = new THREE.MeshPhysicalMaterial({
-            color: colors.score,
-            metalness: 1,
-            roughness: .1,
-            transmission: .4,
-            thickness: .4 ,
+            color: 0xffffff,
         })
 
         this.backboardMesh = new THREE.Mesh(this.backboardGeometry, this.backboardMateral)
+
+        this.backboardMesh.receiveShadow = false
 
         this.backboardShape = new CANNON.Box(
             new CANNON.Vec3(this.glass.width/2, this.glass.height/2, this.glass.depth/2)
@@ -52,9 +55,10 @@ export default class Basket {
         this.backboardBody = new CANNON.Body({
             shape: this.backboardShape,
             mass: 0,
+            material: this.phyWorld.glassMaterial
         })
 
-        this.backboardMesh.position.set(0,2,-4)
+        this.backboardMesh.position.set(0,3,-4)
 
         this.backboardBody.position.copy(this.backboardMesh.position)
 
@@ -65,21 +69,24 @@ export default class Basket {
     createBasket() {
         // MESH
         this.basketGeometry = new THREE.TorusGeometry(this.basket.radius, this.basket.tube, this.basket.radialSegments, this.basket.radialSegments)
-        this.basketMaterial = new THREE.MeshBasicMaterial({
-            color: colors.coins
+        this.basketMaterial = new THREE.MeshStandardMaterial({
+            color: colors.coins,
+            metalness: 1,
         })
 
         this.basketMesh = new THREE.Mesh(this.basketGeometry, this.basketMaterial)
 
-        this.basketMesh.position.set(0,1.5,-3.5)
+        this.basketMesh.position.set(0,2.5,-3.5)
         this.basketMesh.rotateX(Math.PI / 2)
 
 
         // body
         this.basketShape = CANNON.Trimesh.createTorus(this.basket.radius, this.basket.tube, this.basket.radialSegments, this.basket.radialSegments)
+
         this.basketBody = new CANNON.Body({
             shape: this.basketShape,
             mass: 0,
+            material: this.phyWorld.metalMaterial
         })
 
         this.basketBody.position.copy(this.basketMesh.position)
@@ -88,5 +95,21 @@ export default class Basket {
         this.scene.add(this.basketMesh)
         this.phyWorld.instance.addBody(this.basketBody)
 
+    }
+
+
+    createBody() {
+        this.body = new CANNON.Body({
+            mass: 1,
+        })
+        
+    }
+
+    update() {
+        this.basketMesh.position.copy(this.basketBody.position)
+        this.basketMesh.quaternion.copy(this.basketBody.quaternion)
+
+        this.backboardMesh.position.copy(this.backboardBody.position)
+        this.backboardMesh.quaternion.copy(this.backboardBody.quaternion)
     }
 }
