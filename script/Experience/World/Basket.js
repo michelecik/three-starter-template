@@ -27,7 +27,8 @@ export default class Basket {
             tube: .025 ,
             radialSegments: 10,
         }
-
+        
+        this.createTrigger()
         this.createBase()
         this.createBackboard()
         this.createBasket()
@@ -58,7 +59,7 @@ export default class Basket {
             material: this.phyWorld.glassMaterial
         })
 
-        this.backboardMesh.position.set(0,3,-4)
+        this.backboardMesh.position.set(0,3.5,-4)
 
         this.backboardBody.position.copy(this.backboardMesh.position)
 
@@ -68,7 +69,13 @@ export default class Basket {
 
     createBasket() {
         // MESH
-        this.basketGeometry = new THREE.TorusGeometry(this.basket.radius, this.basket.tube, this.basket.radialSegments, this.basket.radialSegments)
+        this.basketGeometry = new THREE.TorusGeometry(
+            this.basket.radius,
+            this.basket.tube,
+            this.basket.radialSegments,
+            this.basket.radialSegments
+        )
+
         this.basketMaterial = new THREE.MeshStandardMaterial({
             color: colors.coins,
             metalness: 1,
@@ -76,7 +83,7 @@ export default class Basket {
 
         this.basketMesh = new THREE.Mesh(this.basketGeometry, this.basketMaterial)
 
-        this.basketMesh.position.set(0,2.5,-3.5)
+        this.basketMesh.position.set(0,3,-3.5)
         this.basketMesh.rotateX(Math.PI / 2)
 
 
@@ -95,6 +102,25 @@ export default class Basket {
         this.scene.add(this.basketMesh)
         this.phyWorld.instance.addBody(this.basketBody)
 
+    }
+
+    // creates a trigger positioned inside basket
+    // TODO: detect collisions and score points
+    createTrigger() {
+        this.triggerGeometry = new THREE.CircleGeometry(
+            this.basket.radius, 32
+        )
+
+        this.triggerMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ff00
+        })
+
+        this.triggerMesh = new THREE.Mesh(this.triggerGeometry, this.triggerMaterial)
+
+        this.triggerMesh.position.set(0,3,-3.5)
+        this.triggerMesh.rotateX(Math.PI / 2)
+
+        this.scene.add(this.triggerMesh)
     }
 
 
